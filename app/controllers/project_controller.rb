@@ -7,14 +7,15 @@ class ProjectController < ApplicationController
 
   def todos
 
-    if params[:project_id] && params[:project_name].blank?
+    if params[:project_id] && params[:project_name].blank? && params[:task_text]
     
       @project = Project.find(params[:project_id])
 
       @todo = @project.todos.create(text: params[:task_text], isCompleted: false)
       
 
-    elsif params[:project_id].blank? && params[:project_name]
+    elsif params[:project_id].blank? && params[:project_name] && params[:task_text]
+
 
       @project = Project.new(title: params[:project_name])
       
