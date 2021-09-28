@@ -1,3 +1,6 @@
+require_relative "../../lib/post_data.rb"
+
+
 class ProjectController < ApplicationController
 
   def index
@@ -11,24 +14,28 @@ class ProjectController < ApplicationController
     
       @project = Project.find(params[:project_id])
 
-      @todo = @project.todos.create(text: params[:task_text], isCompleted: false)
+      render json: @todo = @project.todos.create(text: params[:task_text], isCompleted: false)
       
 
     elsif params[:project_id].blank? && params[:project_name] && params[:task_text]
 
 
-      @project = Project.new(title: params[:project_name])
+       @project = Project.new(title: params[:project_name])
       
       if @project.save
 
-      @project.todos.create(text: params[:task_text], isCompleted: false)
+        @data = PostData.new()
+
+        @data.todo = @project.todos.create(text: params[:task_text], isCompleted: false)
+        @data.category_title = Project.find(@data.todo.project_id).title
+      
+        render json: @data
 
       end
     
   end
     
 end
-
 
 
 def patch 
@@ -38,7 +45,7 @@ def patch
 
   
   if @todo = @project.todos.find(params[:todoid])
-  @todo.update(isCompleted: !@isCompleted)
+ render json: @todo.update(isCompleted: !@isCompleted)
 
    end
 
