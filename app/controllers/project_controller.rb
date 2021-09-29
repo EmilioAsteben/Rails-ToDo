@@ -13,7 +13,7 @@ class ProjectController < ApplicationController
     if params[:project_id] && params[:project_name].blank? && params[:task_text]
     
 
-      @data =  Project.find(params[:project_id]).todos.where(text: params[:task_text], isCompleted: false ).first_or_create do |obj|
+      @data =  Project.find(params[:project_id]).todos.where(text: params[:task_text]).first_or_create do |obj|
         @just_created = true
       end
       if @just_created
@@ -35,7 +35,7 @@ class ProjectController < ApplicationController
 
         @data = PostData.new()
 
-        @data.todo = @project.todos.where(text: params[:task_text], isCompleted: false).first_or_create
+        @data.todo = @project.todos.where(text: params[:task_text]).first_or_create
         @data.category_title = Project.find(@data.todo.project_id).title
       
         render json: @data
